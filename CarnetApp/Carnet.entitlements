@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>aps-environment</key>
+	<string>development</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:*.chezmaurice.eu</string>
+	</array>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.eu.chezmaurice.carnet.app</string>
+	</array>
+	<!-- The households, members and sessions the Maurice app and Carnet share
+	     (SharedPairings.swift). The app's own group stays first: it is where
+	     a Keychain item with no group named goes. -->
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)eu.chezmaurice.carnet.app</string>
+		<string>$(AppIdentifierPrefix)eu.chezmaurice.shared</string>
+	</array>
+</dict>
+</plist>

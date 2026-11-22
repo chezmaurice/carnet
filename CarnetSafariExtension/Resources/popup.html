@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <!-- Safari, with nobody signed in to the app the extension comes with:
+         the way in is the app, not a code. -->
+    <section id="sign-in" class="view" hidden>
+      <h1 class="title" id="sign-in-title"></h1>
+      <p class="body" id="sign-in-body"></p>
+      <button class="primary wide" id="open-app"></button>
+      <p class="fine" data-t="signInNote"></p>
+      <button class="link" id="use-code" data-t="useCode"></button>
+    </section>
+
+    <!-- Connect: a one-time code from the member's app, and where to find it. -->
+    <section id="connect" class="view" hidden>
+      <h1 class="title" data-t="connectTitle"></h1>
+      <ol class="steps">
+        <li data-t="connectStep1"></li>
+        <li data-t="connectStep2"></li>
+        <li data-t="connectStep3"></li>
+      </ol>
+      <label class="label" for="address" data-t="address"></label>
+      <input class="field" id="address" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" />
+      <label class="label" for="code" data-t="code"></label>
+      <input class="field code" id="code" type="text" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" placeholder="ABCD-EFGH" />
+      <div class="status" id="connect-status" role="status"></div>
+      <button class="primary wide" id="connect-button" data-t="connect"></button>
+      <p class="fine" data-t="connectNote"></p>
+    </section>
+
+    <!-- Save. -->
+    <section id="main" class="view" hidden>
+      <header class="bar">
+        <button class="round" id="close" data-label="close">
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="bar-title" data-t="saveTitle"></div>
+        <button class="round tinted" id="save-check" data-label="save">
+          <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </header>
+      <h1 class="title sheet-heading" data-t="saveTitle"></h1>
+
+      <div class="card article">
+        <div class="thumb" id="thumb"></div>
+        <div class="article-text">
+          <div class="article-title" id="title">…</div>
+          <div class="article-host" id="host"></div>
+        </div>
+      </div>
+
+      <div class="hint good" id="full-page" hidden>
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 8.2l2 2 4-4.4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+        <span data-t="fullPage"></span>
+      </div>
+      <div class="hint" id="already" hidden></div>
+
+      <div class="fold-caption" data-t="why"></div>
+      <div class="card fold">
+        <button class="fold-head" id="fold" aria-expanded="false" aria-controls="fold-body">
+          <span class="fold-label">
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 4.5h12M3 9h12M3 13.5h7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            <span class="fold-why" data-t="why"></span>
+            <span class="fold-summary" id="fold-summary"></span>
+          </span>
+          <svg class="chevron" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M4 2.5L9 7l-5 4.5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="fold-body" id="fold-body" hidden>
+          <div class="note-wrap">
+            <label class="visually-hidden" for="comment" data-t="note"></label>
+            <textarea class="field note" id="comment"></textarea>
+            <button class="mic" id="mic" data-label="dictate" hidden>
+              <svg class="mic-idle" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="6.5" y="2" width="5" height="9" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4 8.5a5 5 0 0 0 10 0M9 13.5V16" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+              <svg class="mic-stop" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2" fill="currentColor"/></svg>
+            </button>
+          </div>
+          <div class="hint listening" id="mic-status" hidden></div>
+        </div>
+      </div>
+
+      <footer class="foot">
+        <!-- The account and settings: a cog. -->
+        <button class="round plain" id="settings" data-label="settings">
+          <svg id="cog" width="20" height="20" viewBox="0 0 18 18" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M15.27 7.73 L17.23 7.92 L17.23 10.08 L15.27 10.27 L14.33 12.54 L15.58 14.06 L14.06 15.58 L12.54 14.33 L10.27 15.27 L10.08 17.23 L7.92 17.23 L7.73 15.27 L5.46 14.33 L3.94 15.58 L2.42 14.06 L3.67 12.54 L2.73 10.27 L0.77 10.08 L0.77 7.92 L2.73 7.73 L3.67 5.46 L2.42 3.94 L3.94 2.42 L5.46 3.67 L7.73 2.73 L7.92 0.77 L10.08 0.77 L10.27 2.73 L12.54 3.67 L14.06 2.42 L15.58 3.94 L14.33 5.46Z M9 6.4a2.6 2.6 0 1 0 0 5.2a2.6 2.6 0 1 0 0-5.2Z"/></svg>
+        </button>
+        <div class="shortcut" id="shortcut"></div>
+        <button class="primary" id="save" data-t="save"></button>
+      </footer>
+      <div class="status" id="status" role="status"></div>
+    </section>
+
+    <!-- Saved. -->
+    <section id="saved" class="view done" hidden>
+      <div class="done-mark">
+        <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M7 15.5l5.5 5.5L23 9.5" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="title" data-t="saved"></div>
+      <p class="body center" id="saved-body"></p>
+      <!-- The domain the article was filed under, and the others to choose. -->
+      <div class="card filed" id="filed" hidden>
+        <div class="filed-row">
+          <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2.5 5.5a1.5 1.5 0 0 1 1.5-1.5h3.2l1.6 1.8H14a1.5 1.5 0 0 1 1.5 1.5v6.2A1.5 1.5 0 0 1 14 15H4a1.5 1.5 0 0 1-1.5-1.5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <span class="filed-label" id="filed-label"></span>
+          <button class="link" id="filed-change" aria-expanded="false" aria-controls="filed-choices"></button>
+        </div>
+        <div class="filed-choices" id="filed-choices" role="list" hidden></div>
+      </div>
+      <div class="pair">
+        <button class="secondary" id="saved-close" data-t="close"></button>
+        <button class="primary" id="open-carnet" data-t="openInCarnet" hidden></button>
+      </div>
+    </section>
+
+    <!-- Account. -->
+    <section id="account" class="view" hidden>
+      <div class="card who">
+        <div class="avatar" id="avatar"></div>
+        <div>
+          <div class="who-name" id="who-name"></div>
+          <div class="who-where" id="who-where"></div>
+        </div>
+      </div>
+      <p class="fine" id="via-app" data-t="viaApp" hidden></p>
+      <div class="pair">
+        <button class="secondary" id="account-back" data-t="back"></button>
+        <button class="danger" id="disconnect" data-t="disconnect"></button>
+      </div>
+    </section>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

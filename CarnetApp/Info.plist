@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>eu.chezmaurice.carnet.app</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>carnet</string>
+            </array>
+        </dict>
+    </array>
+    <key>NSCameraUsageDescription</key>
+    <string>The camera is only used to read your invitation’s QR code.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Carnet uses the microphone so you can dictate a note instead of typing it.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Carnet turns your dictation into text on this device whenever your language has an offline model. If it doesn't, Carnet asks you first before sending any audio to Apple.</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>maurice</string>
+    </array>
+</dict>
+</plist>

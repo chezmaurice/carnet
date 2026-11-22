@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.eu.chezmaurice.carnet.app</string>
+	</array>
+	<!-- The session shared with the Maurice app (Shared/SharedSession.swift):
+	     read when Carnet itself has not been opened yet. The extension's own
+	     group stays first: it is where an item with no group named would go. -->
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)eu.chezmaurice.carnet.app.safari</string>
+		<string>$(AppIdentifierPrefix)eu.chezmaurice.shared</string>
+	</array>
+</dict>
+</plist>

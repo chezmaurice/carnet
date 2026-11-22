@@ -1,0 +1,43 @@
+{
+  "fill": {
+    "solid": "srgb:0.12157,0.13333,0.12941,1.00000"
+  },
+  "groups": [
+    {
+      "layers": [
+        {
+          "image-name": "3-emblem.png",
+          "name": "3-emblem"
+        }
+      ],
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "translucency": {
+        "enabled": false,
+        "value": 0.5
+      }
+    },
+    {
+      "layers": [
+        {
+          "glass": false,
+          "image-name": "2-blocks.png",
+          "name": "2-blocks"
+        }
+      ],
+      "shadow": {
+        "kind": "none",
+        "opacity": 0.5
+      },
+      "translucency": {
+        "enabled": false,
+        "value": 0.5
+      }
+    }
+  ],
+  "supported-platforms": {
+    "squares": "shared"
+  }
+}

@@ -1,0 +1,150 @@
+name: Carnet
+options:
+  bundleIdPrefix: eu.chezmaurice
+  deploymentTarget:
+    iOS: "17.0"
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: F5B4ZC8LEU
+
+targets:
+  Carnet:
+    type: application
+    platform: iOS
+    sources:
+      - path: CarnetApp
+        excludes:
+          - Info.plist
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: eu.chezmaurice.carnet.app
+        CODE_SIGN_ENTITLEMENTS: CarnetApp/Carnet.entitlements
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Carnet
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+    dependencies:
+      - target: CarnetShareExtension
+      - target: CarnetNotificationService
+      - target: CarnetSafariExtension
+
+    scheme:
+      testTargets: []
+      gatherCoverageData: false
+
+  CarnetShareExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: CarnetShareExtension
+        excludes:
+          - Info.plist
+          - ShareExtensionPreprocessor.js
+      # Copied into the bundle, never compiled: Safari runs it inside the page.
+      - path: CarnetShareExtension/ShareExtensionPreprocessor.js
+        buildPhase: resources
+      - path: Shared
+      # The app's words, so the sheet speaks the member's language.
+      - path: CarnetApp/Services/L10n.swift
+      - path: CarnetApp/Localizable.xcstrings
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: eu.chezmaurice.carnet.app.share
+        CODE_SIGN_ENTITLEMENTS: CarnetShareExtension/CarnetShareExtension.entitlements
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "Save to Carnet"
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "Carnet uses the microphone so you can dictate a note instead of typing it."
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SKIP_INSTALL: YES
+    info:
+      path: CarnetShareExtension/Info-Generated.plist
+      properties:
+        NSExtension:
+          NSExtensionAttributes:
+            # Runs in the Safari page before the sheet opens and hands back the
+            # rendered DOM, so the server parses what you actually read instead
+            # of fetching the URL and meeting a paywall.
+            NSExtensionJavaScriptPreprocessingFile: ShareExtensionPreprocessor
+            NSExtensionActivationRule: "SUBQUERY(extensionItems, $item, SUBQUERY($item.attachments, $att, ANY $att.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.url\" OR ANY $att.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.file-url\" OR ANY $att.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.data\").@count > 0).@count > 0"
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: "$(PRODUCT_MODULE_NAME).ShareViewController"
+
+  # « Save to Carnet » in Safari's toolbar, on iPhone and iPad. The web half
+  # is Maurice's extension for Chrome and Firefox (maurice/clients/web-clipper),
+  # copied into Resources/ by scripts/sync-web-clipper.sh; the native half
+  # hands its popup the session Carnet is signed in with.
+  CarnetSafariExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: CarnetSafariExtension
+        excludes:
+          - "Resources/**"
+          - "*.entitlements"
+          - Info-Generated.plist
+      # Safari reads manifest.json at the root of the extension's resources,
+      # so the files go in one by one and the two folders as folders.
+      - path: CarnetSafariExtension/Resources
+        buildPhase: resources
+        excludes:
+          - "_locales/**"
+          - "icons/**"
+      - path: CarnetSafariExtension/Resources/_locales
+        type: folder
+        buildPhase: resources
+      - path: CarnetSafariExtension/Resources/icons
+        type: folder
+        buildPhase: resources
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: eu.chezmaurice.carnet.app.safari
+        CODE_SIGN_ENTITLEMENTS: CarnetSafariExtension/CarnetSafariExtension.entitlements
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "Save to Carnet"
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SKIP_INSTALL: YES
+    info:
+      path: CarnetSafariExtension/Info-Generated.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.Safari.web-extension
+          NSExtensionPrincipalClass: "$(PRODUCT_MODULE_NAME).SafariWebExtensionHandler"
+
+  # Opens a sealed push before it is shown: the household encrypts each push to
+  # the device's keys, Apple carries "New message" and a blob (Shared/PushSeal.swift).
+  CarnetNotificationService:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: CarnetNotificationService
+        excludes:
+          - "*.entitlements"
+      - path: Shared/PushSeal.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: eu.chezmaurice.carnet.app.notifications
+        CODE_SIGN_ENTITLEMENTS: CarnetNotificationService/CarnetNotificationService.entitlements
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Carnet
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SKIP_INSTALL: YES
+    info:
+      path: CarnetNotificationService/Info-Generated.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.usernotifications.service
+          NSExtensionPrincipalClass: "$(PRODUCT_MODULE_NAME).NotificationService"
