@@ -1,4 +1,4 @@
-import { api, ext, followColorScheme, SAVE_SLOW_MS, SAVE_TIMEOUT_MS, forget, holdConnect, isConfigured, isSafari, loadConfig, originPattern, parseConnectInput, pendingConnect } from "./ext.js";
+import { api, askHostApp, ext, followColorScheme, HELP_URL, SAVE_SLOW_MS, SAVE_TIMEOUT_MS, forget, holdConnect, isConfigured, isSafari, loadConfig, originPattern, parseConnectInput, pendingConnect } from "./ext.js";
 import { lang, t } from "./strings.js";
 
 /**
@@ -49,6 +49,7 @@ async function init() {
   el("mic").addEventListener("click", toggleDictation);
   el("filed-change").addEventListener("click", toggleChoices);
   el("comment").addEventListener("input", () => { updateSummary(); keepDraft(); });
+  for (const node of document.querySelectorAll(".help")) node.addEventListener("click", openHelp);
   document.addEventListener("keydown", (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key === "Enter" && !el("main").hidden) save();
   });
@@ -66,23 +67,38 @@ function show(id) {
 /**
  * In Safari the extension comes inside an app — Carnet on an iPhone or an
  * iPad, Maurice on a Mac — and is signed in whenever the app is (ext.js,
- * fromHostApp). Nobody signed in there: say so and open the app, rather than
- * ask for an address and a code as if the extension were a program of its
- * own (a first installation stopped there, 21 November 2026). The code stays
- * one press away.
+ * loadConfig). Nobody signed in there: say so and open the app. There is no
+ * address and no code to ask for in Safari, ever: the extension is not a
+ * program of its own there (a first installation stopped at the code on
+ * 21 November 2026, an iPad on the 25th).
+ *
+ * The app names itself in its answer (`config.app`). Should it not have
+ * answered at all, the guess is by the device: a touch screen is an iPhone or
+ * an iPad — the latter calls itself a Macintosh — and has Carnet.
  */
 function showSignIn() {
-  const app = phone ? "Carnet" : "Maurice";
-  const named = (key) => t(key).replaceAll("{app}", app);
+  const touch = /iPhone|iPad/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  const app = config?.app ?? (touch ? "Carnet" : "Maurice");
+  // Carnet's extension also follows the Maurice app's session on the device.
+  const named = (key) => t(app === "Carnet" ? `${key}Carnet` : key).replaceAll("{app}", app);
   el("sign-in-title").textContent = named("signInTitle");
   el("sign-in-body").textContent = named("signInBody");
-  el("open-app").textContent = named("openApp");
+  el("open-app").textContent = t("openApp").replaceAll("{app}", app);
   el("open-app").onclick = async () => {
-    await ext.tabs.create({ url: phone ? "carnet://" : "maurice://" });
+    const url = config?.openUrl ?? (app === "Carnet" ? "carnet://" : null);
+    // A Mac app is brought forward by its extension's native half; an iPhone
+    // or iPad app by its own address, which Safari asks leave to follow.
+    if (url) await ext.tabs.create({ url });
+    else await askHostApp({ type: "open" });
     window.close();
   };
-  el("use-code").onclick = showConnect;
   show("sign-in");
+}
+
+/** The help page — installing and connecting, browser by browser — in a tab. */
+async function openHelp() {
+  await ext.tabs.create({ url: HELP_URL });
+  window.close();
 }
 
 // ── Connect ──────────────────────────────────────────────────────
@@ -188,7 +204,7 @@ async function disconnect() {
   await forget();
   config = await loadConfig();
   if (isConfigured(config)) return showMain();
-  showConnect();
+  return isSafari ? showSignIn() : showConnect();
 }
 
 // ── Save ─────────────────────────────────────────────────────────

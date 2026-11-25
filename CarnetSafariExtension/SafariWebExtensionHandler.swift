@@ -7,15 +7,22 @@ import SafariServices
 /// popup asks one thing, `{type: "session"}`, and is answered with whoever is
 /// signed in to Carnet, read from the app group as the share extension reads
 /// it — or, when Carnet has not been opened yet, with whoever is signed in to
-/// the Maurice app on this device (Shared/SharedSession.swift). With no one
-/// signed in anywhere the answer is empty, and the popup sends the member to
-/// the app; a code is its second choice.
+/// the Maurice app on this device (Shared/SharedSession.swift). The answer
+/// always names the app and the address that opens it: with no one signed in
+/// anywhere it holds nothing else, and the popup says so and sends the member
+/// to the app. It never asks for an address and a code in Safari.
+///
+/// The popup can only ask because the manifest lists `nativeMessaging`:
+/// without that permission Safari leaves `sendNativeMessage` out, and the
+/// extension took every device for one where nobody was signed in (until
+/// extension 2.0.9; scripts/sync-web-clipper.sh now refuses a manifest
+/// without it).
 final class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
     func beginRequest(with context: NSExtensionContext) {
         let item = context.inputItems.first as? NSExtensionItem
         let message = item?.userInfo?[SFExtensionMessageKey] as? [String: Any]
 
-        var reply: [String: Any] = [:]
+        var reply: [String: Any] = ["app": "Carnet", "openUrl": "carnet://"]
         if message?["type"] as? String == "session",
            !CarnetAPI.baseURL.isEmpty, let token = CarnetAPI.authToken {
             reply["serverUrl"] = CarnetAPI.baseURL

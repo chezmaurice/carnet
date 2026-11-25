@@ -34,13 +34,32 @@ export function followColorScheme() {
   query.addEventListener?.("change", apply);
 }
 
-/** Safari hosts the extension inside an app (Carnet on iPhone and iPad,
- *  Maurice on the Mac), which already holds the member's session. */
-export const isSafari =
-  typeof navigator !== "undefined" &&
-  /Safari\//.test(navigator.userAgent) &&
-  !/Chrome\/|Chromium\/|Edg\/|Firefox\//.test(navigator.userAgent);
+/**
+ * Safari hosts the extension inside an app (Carnet on iPhone and iPad, Maurice
+ * on the Mac), which already holds the member's session. Told by the address
+ * the extension's own pages are served from, never by the user agent: an iPad
+ * presents itself as a Mac, and a page inside an extension need not name
+ * Safari at all.
+ */
+export const isSafari = (() => {
+  try {
+    return ext.runtime.getURL("").startsWith("safari-web-extension:");
+  } catch {
+    return false;
+  }
+})();
 
+/**
+ * Who is connected. In Safari the app that carries the extension answers
+ * first — it is the one place where the member signs in and out, and a member
+ * switched in the app is the one who saves; its answer is not stored here.
+ * Everywhere else, and for a Safari connected by a code before 2.0.9, the
+ * session is the one this browser was given (`connect`).
+ *
+ * In Safari the config also carries what the app said of itself (`app`, its
+ * name; `openUrl`, the address that opens it), for the popup to send the
+ * member there when nobody is signed in.
+ */
 export async function loadConfig() {
   const stored = await ext.storage.local.get(["serverUrl", "token", "member", "household"]);
   const config = {
@@ -49,9 +68,22 @@ export async function loadConfig() {
     member: stored.member ?? null,
     household: stored.household ?? null,
   };
-  if (isConfigured(config) || !isSafari) return config;
-  return (await fromHostApp()) ?? config;
+  if (!isSafari) return config;
+  const host = await askHostApp({ type: "session" });
+  const about = { app: host?.app ?? null, openUrl: host?.openUrl ?? null };
+  if (!host?.serverUrl || !host?.token) return { ...config, ...about };
+  return {
+    serverUrl: String(host.serverUrl).replace(/\/+$/, ""),
+    token: host.token,
+    member: host.member ?? null,
+    household: host.household ?? null,
+    fromApp: true,
+    ...about,
+  };
 }
+
+/** Installing and connecting the extension, browser by browser. */
+export const HELP_URL = "https://www.chezmaurice.eu/clipper-help";
 
 export function isConfigured({ serverUrl, token }) {
   return Boolean(serverUrl && token);
@@ -62,22 +94,21 @@ export async function forget() {
 }
 
 /**
- * In Safari, ask the app that carries the extension for the session it is
- * signed in with — read from the app group it shares with its extension. The
- * answer is not stored here: the app stays the one place where the member
- * signs in and out, and a member switched in the app is the one who saves.
+ * In Safari, a word with the app that carries the extension — its native
+ * half, which reads the session from the app group it shares with the app.
+ * `{type: "session"}` asks who is signed in; `{type: "open"}` asks the Mac
+ * app to come forward. Null when the app could not be asked.
+ *
+ * `sendNativeMessage` exists only because the manifest lists the
+ * `nativeMessaging` permission: without it Safari leaves the function out, the
+ * call throws, and the extension believed nobody was signed in — on every
+ * iPhone, iPad and Mac, until 2.0.9. scripts/pack.sh takes the permission out
+ * of the package for the Chrome and Firefox stores, where nothing uses it.
  */
-async function fromHostApp() {
+export async function askHostApp(message) {
+  if (!isSafari) return null;
   try {
-    const reply = await ext.runtime.sendNativeMessage("application.id", { type: "session" });
-    if (!reply?.serverUrl || !reply?.token) return null;
-    return {
-      serverUrl: String(reply.serverUrl).replace(/\/+$/, ""),
-      token: reply.token,
-      member: reply.member ?? null,
-      household: reply.household ?? null,
-      fromApp: true,
-    };
+    return (await ext.runtime.sendNativeMessage("application.id", message)) ?? null;
   } catch {
     return null;
   }

@@ -18,6 +18,9 @@ struct AddDeviceSheet: View {
     @State private var failure: String?
     @State private var state = "pending"
 
+    /// Installing and connecting « Save to Carnet », browser by browser.
+    static let browserHelp = URL(string: "https://www.chezmaurice.eu/clipper-help")!
+
     private var invitation: Invitation? {
         code.map { Invitation(server: CarnetAPI.baseURL, code: Invitation.normalizedCode($0.code) ?? $0.code) }
     }
@@ -57,6 +60,15 @@ struct AddDeviceSheet: View {
                     }
                     .glassBorderedButton()
                     .tint(CarnetTheme.ink)
+                    // Which browsers the code is for — Safari's extension
+                    // comes with Carnet and asks for none — and the page
+                    // that says how to install it in each.
+                    Text(L("browser.connect.which"))
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                    Link(L("browser.connect.help"), destination: Self.browserHelp)
+                        .font(.footnote)
                 } else if let invitation, let code {
                     // Dark modules on white, whatever the theme: a scanner wants contrast.
                     QRCodeImage(text: invitation.link)

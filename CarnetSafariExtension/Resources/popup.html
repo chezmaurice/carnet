@@ -7,16 +7,17 @@
   </head>
   <body>
     <!-- Safari, with nobody signed in to the app the extension comes with:
-         the way in is the app, not a code. -->
+         the way in is the app. No code is ever asked for in Safari. -->
     <section id="sign-in" class="view" hidden>
       <h1 class="title" id="sign-in-title"></h1>
       <p class="body" id="sign-in-body"></p>
       <button class="primary wide" id="open-app"></button>
       <p class="fine" data-t="signInNote"></p>
-      <button class="link" id="use-code" data-t="useCode"></button>
+      <button class="link help" data-t="help"></button>
     </section>
 
-    <!-- Connect: a one-time code from the member's app, and where to find it. -->
+    <!-- Connect (Chrome, Firefox): a one-time code from the member's app, and
+         where to find it. -->
     <section id="connect" class="view" hidden>
       <h1 class="title" data-t="connectTitle"></h1>
       <ol class="steps">
@@ -31,6 +32,7 @@
       <div class="status" id="connect-status" role="status"></div>
       <button class="primary wide" id="connect-button" data-t="connect"></button>
       <p class="fine" data-t="connectNote"></p>
+      <button class="link help" data-t="help"></button>
     </section>
 
     <!-- Save. -->

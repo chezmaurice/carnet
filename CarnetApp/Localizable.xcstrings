@@ -800,6 +800,53 @@
         }
       }
     },
+    "browser.connect.help": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Help with installing the extension"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aide pour installer l’extension"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hilfe zur Installation der Erweiterung"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aiuto per installare l’estensione"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayuda para instalar la extensión"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hulp bij het installeren van de extensie"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajuda para instalar a extensão"
+          }
+        }
+      }
+    },
     "browser.connect.line": {
       "extractionState": "manual",
       "localizations": {
@@ -843,6 +890,53 @@
           "stringUnit": {
             "state": "translated",
             "value": "Na extensão «Guardar no Carnet», cola esta ligação — ou escreve o endereço e o código. Serve uma vez, durante dez minutos."
+          }
+        }
+      }
+    },
+    "browser.connect.which": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For Chrome, Brave, Edge, Arc and Firefox. Safari needs no code: its extension comes with the app."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour Chrome, Brave, Edge, Arc et Firefox. Safari n’a pas besoin de code : son extension vient avec l’app."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Für Chrome, Brave, Edge, Arc und Firefox. Safari braucht keinen Code: Die Erweiterung kommt mit der App."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per Chrome, Brave, Edge, Arc e Firefox. Safari non ha bisogno di codice: la sua estensione arriva con l’app."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para Chrome, Brave, Edge, Arc y Firefox. Safari no necesita código: su extensión viene con la app."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voor Chrome, Brave, Edge, Arc en Firefox. Safari heeft geen code nodig: de extensie zit in de app."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para Chrome, Brave, Edge, Arc e Firefox. O Safari não precisa de código: a extensão vem com a app."
           }
         }
       }
