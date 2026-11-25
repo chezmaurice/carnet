@@ -8,12 +8,16 @@ import dnssd
 /// `_maurice.<old host>  TXT  "v=maurice1; moved=https://<new host>"`. When the
 /// old address stops answering, the device reads that record, asks the new
 /// address to sign a nonce of its own (`/api/health?proof=…`), and follows only
-/// if the signature checks against the identity key it pinned at pairing. A
-/// forged record can point here anywhere; it cannot make the device move.
+/// if the signature checks against the identity key it pinned at pairing.
+/// What the household signs names its own address beside the nonce, and the
+/// device follows only to the address that was signed: a server that merely
+/// passes the question on to the household gets a proof for the household's
+/// address, not for its own. A forged record can point here anywhere; it
+/// cannot make the device move.
 /// The server's half is `services/householdKey.ts`; the record's spelling is in
 /// `docs/moving-a-household.md`. Carnet carries the same file, copied as is.
 enum HouseholdMove {
-    private static let proofContext = "maurice-household-proof:v1\n"
+    private static let proofContext = "maurice-household-proof:v2\n"
 
     /// The new address of the household at `serverURL`, if its old name says it
     /// moved and the new address proves it holds `key`. Nil otherwise.
@@ -45,22 +49,46 @@ enum HouseholdMove {
         return raw.hasSuffix("/") ? String(raw.dropLast()) : raw
     }
 
-    /// True when `serverURL` signs a fresh nonce with the private half of `key`.
-    static func proves(_ serverURL: String, key: String) async -> Bool {
+    /// `https://host[:port]` of an address, lower case: what a household signs
+    /// as its own. Nil for anything that is not a plain http(s) address.
+    static func origin(of serverURL: String) -> String? {
+        guard let c = URLComponents(string: serverURL), let scheme = c.scheme?.lowercased(),
+              scheme == "https" || scheme == "http",
+              let host = c.host?.lowercased(), !host.isEmpty, c.user == nil else { return nil }
+        let standard = scheme == "https" ? 443 : 80
+        let port = c.port.flatMap { $0 == standard ? nil : ":\($0)" } ?? ""
+        return "\(scheme)://\(host)\(port)"
+    }
+
+    /// The bytes a household signs: context, the device's nonce, the address.
+    static func proofMessage(nonce: String, origin: String) -> Data {
+        Data("\(proofContext)\(nonce)\n\(origin)".utf8)
+    }
+
+    /// True when `proof` is `key`'s signature of `nonce` for `origin`.
+    static func verifies(key: String, nonce: String, origin: String, proof: String) -> Bool {
         guard let keyData = Data(base64URL: key),
-              let pub = try? Curve25519.Signing.PublicKey(rawRepresentation: keyData) else { return false }
+              let pub = try? Curve25519.Signing.PublicKey(rawRepresentation: keyData),
+              let signature = Data(base64URL: proof) else { return false }
+        return pub.isValidSignature(signature, for: proofMessage(nonce: nonce, origin: origin))
+    }
+
+    /// True when `serverURL` signs a fresh nonce with the private half of
+    /// `key`, for `serverURL` itself: the address signed must be the one asked.
+    static func proves(_ serverURL: String, key: String) async -> Bool {
+        guard let asked = origin(of: serverURL) else { return false }
         var bytes = [UInt8](repeating: 0, count: 24)
         guard SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes) == errSecSuccess else { return false }
         let nonce = Data(bytes).base64URLEncoded()
-        struct Proof: Decodable { let identity_key: String?; let proof: String? }
+        struct Proof: Decodable { let identity_key: String?; let proof: String?; let proof_origin: String? }
         guard let url = URL(string: "\(serverURL)/api/health?proof=\(nonce)") else { return false }
         var request = URLRequest(url: url)
         request.timeoutInterval = 8
         guard let (data, response) = try? await URLSession.shared.data(for: request),
               (response as? HTTPURLResponse)?.statusCode == 200,
               let h = try? JSONDecoder().decode(Proof.self, from: data), h.identity_key == key,
-              let proof = h.proof.flatMap({ Data(base64URL: $0) }) else { return false }
-        return pub.isValidSignature(proof, for: Data((proofContext + nonce).utf8))
+              h.proof_origin == asked, let proof = h.proof else { return false }
+        return verifies(key: key, nonce: nonce, origin: asked, proof: proof)
     }
 
     // MARK: - DNS
