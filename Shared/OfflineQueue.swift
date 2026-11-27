@@ -4,8 +4,6 @@ import Foundation
 
 enum QueueItemType: String, Codable {
     case articleScrape
-    case fileUpload
-    case bankTransaction
     /// An EPUB or a PDF for the household's library (`POST /api/v1/calibre/add`).
     case libraryBook
 }

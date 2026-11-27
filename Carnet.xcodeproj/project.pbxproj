@@ -130,7 +130,6 @@
 		D862502512A7B4DB821EA9FA /* WidgetSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85B0D244E848C07714F0376 /* WidgetSkeleton.swift */; };
 		DAD0DCF44E309A94616F1426 /* SharedContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E9570DF0D0724B1AD03BB3F /* SharedContent.swift */; };
 		DB181D07A8AB81BB5C44EC6D /* AppShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F8F9B0EB15F528C8A46425 /* AppShell.swift */; };
-		DB78B8EE0DE6C51051FE2E09 /* UploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BB8A69D59FE29B164616E5 /* UploadView.swift */; };
 		DB924813F46C753FBB9DC8B1 /* LogKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5B30748CC9F69042D28571 /* LogKind.swift */; };
 		DBA05C2CE1ACBC4F3F5BAC22 /* LogFabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C05E6AC5504DF0CAFE61D4 /* LogFabView.swift */; };
 		DCC6D60A5FD91C72A2C49EED /* Reading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178536A5AA9E2CAC6BD2F0A2 /* Reading.swift */; };
@@ -323,7 +322,6 @@
 		ECF1022BC63E3B11E5AE774C /* GardenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GardenView.swift; sourceTree = "<group>"; };
 		EF61DAB1D311419F43D3EAFD /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
 		F1C387473A547A832AE5DEDE /* PlanEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanEditorView.swift; sourceTree = "<group>"; };
-		F2BB8A69D59FE29B164616E5 /* UploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadView.swift; sourceTree = "<group>"; };
 		F392174C425C71C110777201 /* MemberSwitchSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberSwitchSheet.swift; sourceTree = "<group>"; };
 		F3F48E3FF06A66CFD096B0D6 /* SleepRingWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepRingWidget.swift; sourceTree = "<group>"; };
 		F68FB4263E6E3856F45F62D9 /* LayoutSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutSpec.swift; sourceTree = "<group>"; };
@@ -516,7 +514,6 @@
 				F1C387473A547A832AE5DEDE /* PlanEditorView.swift */,
 				2B6305DF6112D8374FF1AA4E /* QueueView.swift */,
 				1D2F65C87223B074087A998F /* SettingsView.swift */,
-				F2BB8A69D59FE29B164616E5 /* UploadView.swift */,
 				0E6270AB3D7226B18BCE95F4 /* WidgetCard.swift */,
 				D85B0D244E848C07714F0376 /* WidgetSkeleton.swift */,
 				7F4C306BA5778B274017DCD6 /* Domains */,
@@ -949,7 +946,6 @@
 				063D0B33908CFC066FBF3759 /* SuggestionCover.swift in Sources */,
 				9F73C7CFA80DC3B457A484B8 /* SyncService.swift in Sources */,
 				291326F33DB507209657C9A7 /* UploadSection.swift in Sources */,
-				DB78B8EE0DE6C51051FE2E09 /* UploadView.swift in Sources */,
 				C58A6A2D801CB097C7D84ECF /* WelcomeView.swift in Sources */,
 				7C53FA0E9F139A9658CD325D /* WhoIsHereView.swift in Sources */,
 				513F65527DD8F980DD6F2D50 /* WidgetCard.swift in Sources */,

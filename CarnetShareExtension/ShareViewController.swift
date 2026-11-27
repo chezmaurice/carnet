@@ -20,7 +20,7 @@ class ShareViewController: UIViewController {
     private var sharedFileData: Data?
     private var sharedFilename: String?
 
-    private enum ShareMode { case url, file, book }
+    private enum ShareMode { case url, book }
     private var mode: ShareMode = .url
 
     /// The saved article, for filing it elsewhere from the last screen.
@@ -95,11 +95,18 @@ class ShareViewController: UIViewController {
 
     private func configureForFile(data: Data, filename: String) {
         // An EPUB or a PDF goes to the household's library, where Carnet
-        // reads books; anything else is kept as a document.
-        mode = CarnetAPI.isLibraryBook(filename) ? .book : .file
+        // reads books. Carnet keeps pages and books: any other file has
+        // nowhere to go, and the sheet says so rather than take it.
+        guard CarnetAPI.isLibraryBook(filename) else {
+            model.title = L("share.nothing")
+            model.detail = filename
+            model.canSave = false
+            return
+        }
+        mode = .book
         sharedFileData = data
         sharedFilename = filename
-        model.kind = mode == .book ? .book : .document
+        model.kind = .book
         model.title = filename
         model.detail = ByteCountFormatter.string(fromByteCount: Int64(data.count), countStyle: .file)
         model.allowsNote = false
@@ -170,14 +177,14 @@ class ShareViewController: UIViewController {
             // straight back into the paywall this whole path exists to get past.
             queue.enqueue(item, fileData: htmlData)
 
-        case .file, .book:
+        case .book:
             guard let data = sharedFileData, let filename = sharedFilename else {
                 return finish(message: L("share.nothing"), ok: false)
             }
             let mimeType = filename.hasSuffix(".pdf") ? "application/pdf" : "application/octet-stream"
             let item = QueueItem(
                 id: queuedID,
-                type: mode == .book ? .libraryBook : .fileUpload,
+                type: .libraryBook,
                 createdAt: Date(),
                 payload: QueuePayload(
                     filename: filename,
@@ -186,10 +193,10 @@ class ShareViewController: UIViewController {
                 )
             )
             queue.enqueue(item, fileData: data)
-            if mode == .book { return sendBook(data: data, filename: filename, queuedID: queuedID) }
+            return sendBook(data: data, filename: filename, queuedID: queuedID)
         }
 
-        // A file is queued for the main app to upload; nothing more happens here.
+        // A book has left with `sendBook`; what remains is a page.
         guard mode == .url, let url = sharedURL else {
             return finish(message: L("share.queued"), ok: false)
         }

@@ -92,12 +92,6 @@ final class SyncService {
                 selection: item.payload.selection
             )
 
-        case .fileUpload:
-            guard let filename = item.payload.filename,
-                  let data = queue.fileData(for: item.id) else { return }
-            let mime = item.payload.mimeType ?? "application/octet-stream"
-            _ = try await CarnetAPI.upload(data: data, filename: filename, mimeType: mime)
-
         case .libraryBook:
             guard let filename = item.payload.filename,
                   let data = queue.fileData(for: item.id) else { return }
@@ -109,12 +103,6 @@ final class SyncService {
                 lastError = "\(filename): \(message)"
             }
 
-        case .bankTransaction:
-            guard let filename = item.payload.filename,
-                  let data = queue.fileData(for: item.id) else { return }
-            _ = try await CarnetAPI.uploadBankTransaction(
-                data: data, filename: filename, timestamp: item.createdAt
-            )
         }
     }
 }

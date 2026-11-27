@@ -20,7 +20,7 @@ Carnet is a **unified companion** with three co-equal roles ("peers"):
 
 | Role | What it does | Maurice domain |
 |---|---|---|
-| **Log** | Fast ad-hoc capture — meals, exercise, breathwork, meditation, notes, places, documents, tasks — via a radial FAB, free-text parsing and the Share Extension. | `signals`, `uploads`, `places` |
+| **Log** | Fast ad-hoc capture — meals, exercise, breathwork, meditation, notes, places, tasks — via a radial FAB, free-text parsing and the Share Extension. | `signals`, `places` |
 | **Dashboards** | Server-defined layouts of warm-monochrome widgets over the household's health, activity, and coaching data, navigable by day. | `layouts`, health, `signals`, `coaching` |
 | **Content** | Read and edit the household's living memory — daily notes & dreams, garden fiches (books, movies, series, podcasts, people, articles), tasks & calendar, and reading (Calibre / Readwise). | `garden`, `tasks`, `calendar`, `calibre`, `readwise` |
 
@@ -57,7 +57,7 @@ login or user-switching should be designed once and used by both.
   - `CarnetApp.swift` — entry point + `RootView` gate: `PairingView` → `MemberPickerView` → `DashboardView`.
   - `CarnetTheme.swift` — the single source of truth for design tokens (colors, type, spacing, radii, sizes). Mirrors the Maurice CSS token sheet. **All views reference this exclusively.**
   - `Models/LayoutSpec.swift` — the server-driven dashboard/layout schema (rows → widgets → data bindings → resolved metrics).
-  - `Views/` — dashboard, widgets, log FAB, settings, pairing, member picker, uploads, coaching, queue.
+  - `Views/` — dashboard, widgets, log FAB, settings, pairing, member picker, coaching, queue.
   - `Services/` — `CarnetSession` (household/member state, App Group persistence), `SyncService`, `LayoutService`, `MetricService`.
 - **`Shared/`** — `CarnetAPI.swift` (the full HTTP client) and `OfflineQueue.swift`, shared between the app and the Share Extension.
 - **`CarnetShareExtension/`** — "Save to Carnet" share sheet target (URLs, files, data) that posts as the currently active member via the App Group.
@@ -76,8 +76,8 @@ login or user-switching should be designed once and used by both.
 ### API surface (Maurice server)
 
 `Shared/CarnetAPI.swift` — `health`, `auth/setup`, `auth/login`, `users`; `v1/signals`
-(+ `parse`, `aggregated`), `v1/layouts`, `v1/dashboard/:id/data`, `v1/uploads`,
-`v1/places`, `v1/articles/scrape`, `v1/calibre/add`, `v1/bank-transactions`.
+(+ `parse`, `aggregated`), `v1/layouts`, `v1/dashboard/:id/data`,
+`v1/places`, `v1/articles/scrape`, `v1/calibre/add`.
 `CarnetApp/Services/DomainsAPI.swift` — the domains surface: `domains` (the member's
 domains and reading companions), `domains/:id/brief` (read, correct, erase, rewrite now),
 `conversations` (the ones Maurice opened on his own, read here and marked read),

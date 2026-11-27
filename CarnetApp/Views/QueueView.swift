@@ -94,8 +94,6 @@ struct QueueView: View {
     private func iconName(for type: QueueItemType) -> String {
         switch type {
         case .articleScrape: return "doc.text"
-        case .fileUpload: return "arrow.up.doc"
-        case .bankTransaction: return "banknote"
         case .libraryBook: return "book"
         }
     }
@@ -103,8 +101,6 @@ struct QueueView: View {
     private func iconColor(for type: QueueItemType) -> Color {
         switch type {
         case .articleScrape: return .blue
-        case .fileUpload: return .orange
-        case .bankTransaction: return .green
         case .libraryBook: return .blue
         }
     }

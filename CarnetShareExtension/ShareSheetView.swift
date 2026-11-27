@@ -5,7 +5,7 @@ import SwiftUI
 /// and once saved offers the member's other domains.
 @Observable @MainActor
 final class ShareModel {
-    enum Kind { case article, document, book }
+    enum Kind { case article, book }
     enum Phase: Equatable {
         case editing
         case working(String)
@@ -103,7 +103,6 @@ struct ShareSheetView: View {
     private var saveLabel: String {
         switch model.kind {
         case .article: "share.save"
-        case .document: "share.save_document"
         case .book: "share.add_book"
         }
     }
@@ -168,7 +167,6 @@ struct ShareSheetView: View {
     private var placeholderSymbol: String {
         switch model.kind {
         case .article: "globe"
-        case .document: "doc"
         case .book: "book.closed"
         }
     }
