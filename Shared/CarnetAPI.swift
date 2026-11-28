@@ -82,8 +82,23 @@ final class CarnetAPI {
     /// too, and the active member's token rides along on them.
     static func fetch(_ request: URLRequest) async throws -> (Data, URLResponse) {
         let (data, response) = try await URLSession.shared.data(for: request)
-        if let http = response as? HTTPURLResponse { note(http, for: request) }
+        if let http = response as? HTTPURLResponse {
+            note(http, for: request)
+            if isConsentRefusal(data, status: http.statusCode) {
+                NotificationCenter.default.post(name: .carnetAIConsentRequired, object: nil)
+            }
+        }
         return (data, response)
+    }
+
+    /// A 403 that says the member has not agreed to send their data to an AI
+    /// provider (`ai_consent_required`, as the error or as its code): nothing
+    /// was sent. The app reads the member's answer again and asks if none is
+    /// on file (`AIConsentStore`).
+    static func isConsentRefusal(_ data: Data, status: Int) -> Bool {
+        guard status == 403, data.count < 4096,
+              let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return false }
+        return (obj["code"] as? String) == "ai_consent_required" || (obj["error"] as? String) == "ai_consent_required"
     }
 
     static func note(_ http: HTTPURLResponse, for request: URLRequest) {
@@ -658,6 +673,8 @@ enum LinkCover {
 extension Notification.Name {
     /// A member's token was answered 401 (`userInfo["token"]`).
     static let carnetSessionRejected = Notification.Name("carnet.sessionRejected")
+    /// A request was refused for want of consent to the AI providers.
+    static let carnetAIConsentRequired = Notification.Name("carnet.aiConsentRequired")
 }
 
 // MARK: - Token vault

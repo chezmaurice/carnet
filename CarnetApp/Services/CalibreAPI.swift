@@ -35,7 +35,9 @@ enum CalibreAPI {
     private static func run(_ request: URLRequest) async throws -> Data {
         let (data, response) = try await CarnetAPI.fetch(request)
         guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
-            throw CarnetAPI.APIError.serverError(String(data: data, encoding: .utf8) ?? "")
+            let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+            throw CarnetAPI.APIError.serverError(AIConsentStore.refusalMessage(data, status: status)
+                                                 ?? String(data: data, encoding: .utf8) ?? "")
         }
         return data
     }

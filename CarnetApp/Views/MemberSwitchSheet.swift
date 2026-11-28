@@ -8,6 +8,7 @@ import SwiftUI
 struct MemberSwitchSheet: View {
     @Environment(CarnetSession.self) private var session
     @Environment(SyncService.self) private var sync
+    @Environment(AIConsentStore.self) private var aiConsent
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
 
@@ -18,6 +19,7 @@ struct MemberSwitchSheet: View {
     @State private var invitingGuest = false
     @State private var forgetting = false
     @State private var deleting = false
+    @State private var reviewingAI = false
 
     var body: some View {
         NavigationStack {
@@ -144,6 +146,14 @@ struct MemberSwitchSheet: View {
                 Label(L("privacy.terms"), systemImage: "doc.text")
             }
             if session.activeMember != nil {
+                // The answer about the AI providers, to read or change.
+                Button { reviewingAI = true } label: {
+                    Label(L("ai.consent.carnet.row"), systemImage: "server.rack")
+                }
+                .sheet(isPresented: $reviewingAI) {
+                    AIConsentView(onClose: { reviewingAI = false })
+                        .task { await aiConsent.refresh() }
+                }
                 Button(role: .destructive) { deleting = true } label: {
                     Label(L("mydata.delete.button"), systemImage: "person.crop.circle.badge.xmark")
                 }

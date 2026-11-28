@@ -32,6 +32,7 @@ enum MauriceAPI {
     }
 
     private static func message(_ data: Data, status: Int) -> String {
+        if let refusal = AIConsentStore.refusalMessage(data, status: status) { return refusal }
         if let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
            let msg = obj["error"] as? String {
             return msg

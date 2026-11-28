@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		001EEBA89B9CEF5561A9084B /* AIConsentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94286F25C14C78A31CAF9411 /* AIConsentView.swift */; };
 		063D0B33908CFC066FBF3759 /* SuggestionCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4A5368973DF8AC3D9ED8CC /* SuggestionCover.swift */; };
 		0FBA6B88A03BA8748918CF1F /* HouseholdTranscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5243D615777F38870B637FC /* HouseholdTranscription.swift */; };
 		13C594282364DED12B9B2203 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = AB94A8AE5C13C8F5C276CB93 /* popup.html */; };
@@ -76,6 +77,7 @@
 		8D692959F17C12AC4659A215 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CFCF9CE4994FB068C013A7 /* NotificationService.swift */; };
 		8F881E939D002E13355A1362 /* CarnetAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F35D20D93CA74D17BEFA6C /* CarnetAPI.swift */; };
 		92C68AE2FFF819F20548181F /* OFL-YoungSerif.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9C54AAE035031778C2C8A742 /* OFL-YoungSerif.txt */; };
+		960963F5B48D1600CE6BD0D7 /* AIConsent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB8C11B892F1F28763652C9 /* AIConsent.swift */; };
 		9CAAA3DA204A2D75866B764E /* LinkBookSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF50DA13F3CAFCFE2D75D884 /* LinkBookSheet.swift */; };
 		9E257B209FE7FB53BE30C170 /* DictationMic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCF52A6AD68732405EAE39C /* DictationMic.swift */; };
 		9E2A4F5A256A35AB459922E3 /* Glass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA4E5B798E2F4788C0FE121 /* Glass.swift */; };
@@ -187,6 +189,7 @@
 		1E2FC79D88AB66851BC7DBFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1E741CE3585C3C7616952BBC /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
 		1EA4E5B798E2F4788C0FE121 /* Glass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Glass.swift; sourceTree = "<group>"; };
+		1EB8C11B892F1F28763652C9 /* AIConsent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIConsent.swift; sourceTree = "<group>"; };
 		1FBDDC748A78A7BB122570FD /* CarnetSafariExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = CarnetSafariExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		240A71B835F7EEE9F5AF967B /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		24CFCF9CE4994FB068C013A7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
@@ -236,6 +239,7 @@
 		9120671FBBCF28137FC4C66B /* AskMauriceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskMauriceView.swift; sourceTree = "<group>"; };
 		92D2C228B7069CA576CD9B35 /* ResonanceViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResonanceViews.swift; sourceTree = "<group>"; };
 		93099ABC238DD0EC554F8EB1 /* CarnetShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CarnetShareExtension.entitlements; sourceTree = "<group>"; };
+		94286F25C14C78A31CAF9411 /* AIConsentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIConsentView.swift; sourceTree = "<group>"; };
 		946FE6704EA33A3C6ED8A0C9 /* ArticlesShelfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesShelfView.swift; sourceTree = "<group>"; };
 		954B147E99CB2FFBF408AA7E /* CarnetShareExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = CarnetShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		9692BF28A3A6DAD8CA5185B5 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = AppIcon.icon; sourceTree = "<group>"; };
@@ -377,6 +381,7 @@
 		49DECB9240F335D6E04D1720 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				1EB8C11B892F1F28763652C9 /* AIConsent.swift */,
 				C32BD8948925CBAC490A14BC /* CalibreAPI.swift */,
 				6A34DA802E81C45BAF82719F /* CarnetNotifications.swift */,
 				75B00A816B7E4439423CA4D4 /* CarnetSession.swift */,
@@ -467,6 +472,7 @@
 			isa = PBXGroup;
 			children = (
 				474620494DC6014DBB8A2F51 /* AddDeviceSheet.swift */,
+				94286F25C14C78A31CAF9411 /* AIConsentView.swift */,
 				D52619C443B28E87863FD91A /* ConnectDisclosure.swift */,
 				1762F56C9A7D99C85C5AB692 /* EntryBackdrop.swift */,
 				02998C9F703D29B746DB2A4E /* EntrySheets.swift */,
@@ -767,6 +773,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				960963F5B48D1600CE6BD0D7 /* AIConsent.swift in Sources */,
+				001EEBA89B9CEF5561A9084B /* AIConsentView.swift in Sources */,
 				BED049532A35974D131D2403 /* AddDeviceSheet.swift in Sources */,
 				7DAEB83DD559E68C720816EA /* AddEntrySheet.swift in Sources */,
 				DB181D07A8AB81BB5C44EC6D /* AppShell.swift in Sources */,

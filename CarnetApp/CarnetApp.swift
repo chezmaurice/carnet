@@ -11,12 +11,15 @@ struct CarnetApp: App {
     @State private var session = CarnetSession()
     @State private var syncService = SyncService()
     @State private var router = CarnetRouter()
+    @State private var aiConsent = AIConsentStore()
 
     var body: some Scene {
         WindowGroup {
             Group {
                 #if DEBUG
-                if ReplyGallery.requested { ReplyGallery() } else {
+                if ReplyGallery.requested { ReplyGallery() }
+                else if AIConsentStore.galleryRequested { AIConsentView().onAppear { aiConsent.seedSample() } }
+                else {
                     RootView()
                 }
                 #else
@@ -30,6 +33,7 @@ struct CarnetApp: App {
             .environment(session)
             .environment(syncService)
             .environment(router)
+            .environment(aiConsent)
             .preferredColorScheme(CarnetTheme.colorSchemeOverride)
             .onAppear { wirePush() }
             // Signed out while offline: nothing else runs once no member is
@@ -89,6 +93,7 @@ struct CarnetApp: App {
 private struct RootView: View {
     @Environment(CarnetSession.self) private var session
     @Environment(SyncService.self) private var syncService
+    @Environment(AIConsentStore.self) private var aiConsent
 
     private var previewingReading: Bool {
         #if DEBUG
@@ -123,6 +128,17 @@ private struct RootView: View {
                     }
                     // Another member's captures may have been waiting for them.
                     .onChange(of: session.activeMemberId) { Task { await syncService.syncNow() } }
+                    // The member's answer about the AI providers, read when
+                    // they arrive and when the app comes back: it may have
+                    // been given in the Maurice app, or a provider added.
+                    .task(id: "\(session.currentHouseholdId ?? "")#\(session.activeMemberId ?? "")") { await aiConsent.refresh() }
+                    .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+                        Task { await aiConsent.refresh() }
+                    }
+                    // The question, once the « before you connect » notice
+                    // is out of the way: no answer on file is a no for the
+                    // server, so it is asked before anything is refused.
+                    .fullScreenCover(isPresented: consentOwed) { AIConsentView() }
                     .sheet(isPresented: disclosureOwed) {
                         ConnectDisclosureSheet(
                             onAccept: {
@@ -134,6 +150,11 @@ private struct RootView: View {
                     }
             }
         }
+    }
+
+    private var consentOwed: Binding<Bool> {
+        Binding(get: { _ = disclosureAck; return aiConsent.needsAnswer && ConnectDisclosure.owed(by: session) == nil },
+                set: { _ in })
     }
 
     /// Bumped on acknowledge, so the notice's condition is read again.

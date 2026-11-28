@@ -21,7 +21,8 @@ final class SessionClosures {
 
     /// What the server answered to a closure.
     enum Outcome: Equatable {
-        /// Closed now (2xx), or already closed or unknown there (401).
+        /// Closed now (the server's own `{"ok": true}`), or already closed
+        /// or unknown there (401).
         case closed
         /// No answer, or an answer that says nothing about the session: ask again.
         case retry
@@ -101,13 +102,20 @@ final class SessionClosures {
         request.setValue("Bearer \(entry.token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = Data("{}".utf8)
-        guard let (_, response) = try? await URLSession.shared.data(for: request),
+        guard let (data, response) = try? await URLSession.shared.data(for: request),
               let status = (response as? HTTPURLResponse)?.statusCode else { return .retry }
-        return outcome(status: status)
+        return outcome(status: status, body: data)
     }
 
-    static func outcome(status: Int) -> Outcome {
-        (200...299).contains(status) || status == 401 ? .closed : .retry
+    /// A success counts only when it is the server's own (`{"ok": true}`):
+    /// on a household reached over plain http, a captive portal answers 200
+    /// to anything, and the session would be forgotten without being closed.
+    static func outcome(status: Int, body: Data) -> Outcome {
+        if status == 401 { return .closed }
+        guard (200...299).contains(status),
+              let obj = try? JSONSerialization.jsonObject(with: body) as? [String: Any],
+              obj["ok"] as? Bool == true else { return .retry }
+        return .closed
     }
 
     // MARK: - The Keychain
