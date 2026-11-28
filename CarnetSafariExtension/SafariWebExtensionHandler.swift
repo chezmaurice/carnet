@@ -2,7 +2,7 @@ import Foundation
 import SafariServices
 
 /// The native half of the Safari extension on iPhone and iPad. The web half is
-/// Maurice's (maurice/clients/web-clipper, copied into Resources/ by
+/// Maurice's (maurice-ios/web-clipper, copied into Resources/ by
 /// scripts/sync-web-clipper.sh), the same code as in Chrome and Firefox. Its
 /// popup asks one thing, `{type: "session"}`, and is answered with whoever is
 /// signed in to Carnet, read from the app group as the share extension reads

@@ -81,7 +81,7 @@ targets:
           NSExtensionPrincipalClass: "$(PRODUCT_MODULE_NAME).ShareViewController"
 
   # « Save to Carnet » in Safari's toolbar, on iPhone and iPad. The web half
-  # is Maurice's extension for Chrome and Firefox (maurice/clients/web-clipper),
+  # is Maurice's extension for Chrome and Firefox (maurice-ios/web-clipper),
   # copied into Resources/ by scripts/sync-web-clipper.sh; the native half
   # hands its popup the session Carnet is signed in with.
   CarnetSafariExtension:
