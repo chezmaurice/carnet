@@ -42,6 +42,8 @@ final class SyncService {
 
     @MainActor
     func syncNow() async {
+        // The network may be back: sessions given up while offline are closed.
+        await SessionClosures.shared.flush()
         guard !isSyncing else { return }
         isSyncing = true
         lastError = nil

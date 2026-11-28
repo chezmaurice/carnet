@@ -32,6 +32,11 @@ struct CarnetApp: App {
             .environment(router)
             .preferredColorScheme(CarnetTheme.colorSchemeOverride)
             .onAppear { wirePush() }
+            // Signed out while offline: nothing else runs once no member is
+            // signed in, so the sessions still to close are sent from here.
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                Task { await SessionClosures.shared.flush() }
+            }
             .onOpenURL { open($0) }
             // A tapped https://<household>/join?code=… (universal link).
             .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { activity in

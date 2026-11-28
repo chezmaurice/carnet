@@ -174,6 +174,10 @@ final class CarnetSession {
     func unpair() {
         guard let hid = currentHouseholdId else { return }
         for member in deviceMembers {
+            // Each session held here is closed on the server, not only erased.
+            if let url = serverURL, let token = tokenForMember(member.id) {
+                SessionClosures.shared.close(server: url, token: token)
+            }
             removeToken(for: member.id)
             TokenVault.remove(Self.mcpKey(hid, member.id))
             if let url = serverURL { MemberStore.purge(server: url, member: member.id) }
@@ -253,7 +257,13 @@ final class CarnetSession {
         return true
     }
 
+    /// Sign a member out of this device: their session is closed on the
+    /// server (`SessionClosures` — at once, or when the network is back) and
+    /// what the device kept for them goes.
     func logoutMember(_ id: String) {
+        if let url = serverURL, let token = tokenForMember(id) {
+            SessionClosures.shared.close(server: url, token: token)
+        }
         if let token = tokenForMember(id), TokenVault.get("carnet.token.\(id)") == token {
             TokenVault.remove("carnet.token.\(id)")
         }
