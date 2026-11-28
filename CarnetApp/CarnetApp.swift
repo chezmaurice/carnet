@@ -10,8 +10,6 @@ struct CarnetApp: App {
 
     @State private var session = CarnetSession()
     @State private var syncService = SyncService()
-    @State private var layoutService = LayoutService()
-    @State private var metricService = MetricService()
     @State private var router = CarnetRouter()
 
     var body: some Scene {
@@ -19,10 +17,10 @@ struct CarnetApp: App {
             Group {
                 #if DEBUG
                 if ReplyGallery.requested { ReplyGallery() } else {
-                    RootView(layoutService: layoutService, metricService: metricService)
+                    RootView()
                 }
                 #else
-                RootView(layoutService: layoutService, metricService: metricService)
+                RootView()
                 #endif
             }
             // The member's language (AppLanguage): the whole interface is
@@ -86,8 +84,6 @@ struct CarnetApp: App {
 private struct RootView: View {
     @Environment(CarnetSession.self) private var session
     @Environment(SyncService.self) private var syncService
-    let layoutService: LayoutService
-    let metricService: MetricService
 
     private var previewingReading: Bool {
         #if DEBUG
@@ -108,7 +104,7 @@ private struct RootView: View {
             } else if !session.hasActiveSession {
                 WhoIsHereView()
             } else {
-                AppShell(layoutService: layoutService, metricService: metricService)
+                AppShell()
                     .onAppear {
                         syncService.startMonitoring()
                         // Signed in: ask for notifications, register, upload

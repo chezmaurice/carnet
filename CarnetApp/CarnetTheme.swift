@@ -124,7 +124,7 @@ enum CarnetTheme {
 
     // MARK: - Semantic
 
-    /// Goal-met — the muted sage, the only semantic hue (dashboards).
+    /// Goal-met — the muted sage, the only semantic hue.
     static let good = Color(UIColor { palette(for: $0).isDark ? rgb(0x8aa88a) : rgb(0x5a735a) })
 
     // MARK: - Legacy aliases (map old names to new tokens)
@@ -140,20 +140,8 @@ enum CarnetTheme {
     static let warning = inkSoft
     static let negative = inkMute
 
-    /// Sleep ring — monochrome ink-alpha hierarchy
-    static let sleepDeep = ink
-    static let sleepREM = inkSoft
-    static let sleepCore = inkMute
-    static let sleepAwake = inkHint
 
-    /// Heatmap — ink (on) vs rule (off)
-    static let heatmapNone = rule
-    static let heatmapLow = inkHint
-    static let heatmapMedium = inkSoft
-    static let heatmapHigh = ink
 
-    /// Sparkline / trend stroke
-    static let sparklineStroke = ink
 
     // MARK: - Typography (Young Serif · system · system mono)
 
@@ -174,8 +162,6 @@ enum CarnetTheme {
         .system(size: size, weight: weight, design: .monospaced)
     }
 
-    /// Widget title / eyebrow — mono, uppercase
-    static let widgetTitle: Font = mono(10, weight: .medium)
     /// Large metric value
     static let metricLarge: Font = sans(28, weight: .semibold)
     /// Medium metric value
@@ -198,46 +184,32 @@ enum CarnetTheme {
     static let subheadline: Font = sans(14, weight: .regular)
     /// Section header bold caption
     static let captionBold: Font = sans(12.5, weight: .semibold)
-    /// Donut center mono
-    static let donutMono: Font = mono(13).monospacedDigit()
-    /// Donut unit micro
-    static let donutUnit: Font = mono(7.5)
-    /// Section label eyebrow (between widget groups) — mono, uppercase
+    /// Section label eyebrow — mono, uppercase
     static let sectionLabel: Font = mono(9.5, weight: .medium)
     /// Section label letter spacing (0.14em at 9.5pt)
     static let sectionLabelTracking: CGFloat = 1.33
-    /// Dashboard header date eyebrow
+    /// Screen header date eyebrow
     static let headerEyebrow: Font = mono(10, weight: .medium)
-    /// Dashboard / screen header title — serif display
+    /// Screen header title — serif display
     static let headerTitle: Font = display(32)
     /// Header title tracking
     static let headerTitleTracking: CGFloat = -0.16
-    /// Meal type micro eyebrow
-    static let mealTypeMicro: Font = mono(8.5)
-    /// Meal time mono
-    static let mealTimeMono: Font = mono(10.5)
-    /// Meal description body
-    static let mealBody: Font = sans(12.5, weight: .regular)
 
     // MARK: - Spacing
 
     static let cardPadding: CGFloat = 16
     static let cardTitleSpacing: CGFloat = 8
-    static let widgetSpacing: CGFloat = 12
     static let pageHorizontalPadding: CGFloat = 20
     static let rowSpacing: CGFloat = 12
     static let pageVerticalPadding: CGFloat = 8
     static let itemSpacing: CGFloat = 6
     static let tightSpacing: CGFloat = 4
     static let inlineSpacing: CGFloat = 2
-    static let donutGap: CGFloat = 14
 
     // MARK: - Corner radii — small on inline elements, generous on what floats
 
     static let cardCornerRadius: CGFloat = 14
     static let innerCornerRadius: CGFloat = 6
-    static let heatmapCellRadius: CGFloat = 3
-    static let progressBarRadius: CGFloat = 2
     /// Covers and thumbnails
     static let coverCornerRadius: CGFloat = 3
     /// Fields and dialogs
@@ -250,21 +222,8 @@ enum CarnetTheme {
     /// Hairline width — half a point, as in the Maurice app
     static let hairline: CGFloat = 0.5
     static let cardBorderWidth: CGFloat = 0.5
-    static let progressStrokeWidth: CGFloat = 5
-    static let sleepRingStrokeWidth: CGFloat = 8
-    static let sparklineStrokeWidth: CGFloat = 1.5
-    static let progressBarHeight: CGFloat = 4
-    static let donutSize: CGFloat = 64
-    static let sleepRingSize: CGFloat = 88
-    static let heatmapCellSize: CGFloat = 15
-    static let heatmapCellGap: CGFloat = 5
     static let legendDotSize: CGFloat = 6
-    static let heatmapLabelWidth: CGFloat = 82
-    static let mealTimeWidth: CGFloat = 54
-    /// Widget title letter spacing (0.14em at 10pt)
-    static let widgetTitleTracking: CGFloat = 1.4
     static let narrowBreakpoint: CGFloat = 375
-    static let sparklineDotRadius: CGFloat = 2.25
     static let checkboxSize: CGFloat = 14
     static let checkboxBorderWidth: CGFloat = 1
     static let checkboxCornerRadius: CGFloat = 3
@@ -278,16 +237,10 @@ enum CarnetTheme {
 
     // MARK: - FAB
 
-    static let fabSize: CGFloat = 55
-    static let fabInset: CGFloat = 18
-    static let fabItemSize: CGFloat = 45
-    static let fabRadius: CGFloat = 155
 
     // MARK: - Row heights
 
     static let defaultRowHeight: CGFloat = 140
-    static let heatmapRowHeight: CGFloat = 200
-    static let mealListRowHeight: CGFloat = 220
     static let narrativeRowHeight: CGFloat = 160
 
     // MARK: - Helpers

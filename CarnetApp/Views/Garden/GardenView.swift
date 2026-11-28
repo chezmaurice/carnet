@@ -25,7 +25,7 @@ enum GardenSort: String, GridSortChoice {
 /// Unopened fiches (article shares nobody has written on) stay out: they are
 /// the Reading shelf's business until a note makes them a fiche.
 struct GardenView: View {
-    /// Opens the app drawer (shown as ☰ in the header when hosted in the shell).
+    /// Opens a menu (shown as ☰ in the header), when the host has one.
     var onMenu: (() -> Void)? = nil
 
     @State private var entries: [GardenEntry] = []

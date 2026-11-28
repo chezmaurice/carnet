@@ -1,0 +1,9 @@
+# Mail addresses the check lets through although they are not on an example
+# domain: made-up people on a real provider, and services' public addresses.
+# Adding a line here is a decision: make sure it is nobody's address.
+
+# The example in the check's own documentation
+alex.example@icloud.com
+
+# The browser extension's identifier (an add-on id, not a mailbox)
+clipper@chezmaurice.eu

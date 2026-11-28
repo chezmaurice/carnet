@@ -36,7 +36,7 @@ enum ShelfSort: String, GridSortChoice {
 /// bottom panel, several at once; nothing is behind a mode.
 ///
 /// What is not an entry — every note whatever it was written on, what Maurice
-/// keeps on the member, and later the log, the dashboards — is one tap away
+/// keeps on the member — is one tap away
 /// under the member's button.
 struct ShelfView: View {
     /// Opens the member/household sheet.

@@ -27,7 +27,7 @@ What happens next:
 
 This repository: Carnet for iOS and iPadOS and its extensions (share,
 Safari, notifications). The server it talks to lives in
-[chez-maurice](https://github.com/chezmaurice/chez-maurice), under the same
+[maurice-server](https://github.com/chezmaurice/maurice-server), under the same
 policy; a flaw in a route belongs there.
 
 Only the `main` branch and the latest released builds are supported; fixes
