@@ -15793,6 +15793,53 @@
           }
         }
       }
+    },
+    "signin.notkept": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Gerät konnte Ihre Sitzung nicht speichern: Sie sind nicht angemeldet. Versuchen Sie es erneut. Ein Code gilt nur einmal: Wenn Sie einen verwendet haben, bitten Sie um einen neuen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This device could not store your session, so you are not signed in. Try again. A code works only once: if you used one, ask for a new one."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este dispositivo no pudo guardar tu sesión: no has iniciado sesión. Inténtalo de nuevo. Un código solo sirve una vez: si usaste uno, pide otro."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cet appareil n’a pas pu enregistrer votre session : vous n’êtes pas connecté. Réessayez. Un code ne sert qu’une fois : si vous en avez utilisé un, demandez-en un nouveau."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo dispositivo non ha potuto salvare la sessione: non hai effettuato l’accesso. Riprova. Un codice vale una sola volta: se ne hai usato uno, chiedine uno nuovo."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dit apparaat kon je sessie niet opslaan: je bent niet ingelogd. Probeer het opnieuw. Een code werkt maar één keer: heb je er een gebruikt, vraag dan een nieuwe."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este dispositivo não conseguiu guardar a sua sessão: não tem sessão iniciada. Tente novamente. Um código só serve uma vez: se usou um, peça outro."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

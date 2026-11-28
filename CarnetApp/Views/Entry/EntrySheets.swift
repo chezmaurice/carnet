@@ -80,7 +80,7 @@ extension CarnetSession {
     func unlock(_ member: CarnetAPI.Member, pin: String) async -> String? {
         do {
             let resp = try await CarnetAPI.login(userID: member.id, pin: pin)
-            loginMember(resp.user_id, token: resp.token)
+            guard loginMember(resp.user_id, token: resp.token) else { return L("signin.notkept") }
             var updated = deviceMembers.filter { $0.id != member.id }
             updated.append(member)
             updateDeviceMembers(updated)
@@ -289,7 +289,11 @@ struct JoinSheet: View {
 
     private func finish(_ member: CarnetAPI.Member, token: String) {
         session.pendingInvitation = nil
-        session.loginMember(member.id, token: token)
+        // The code is spent either way; say why nobody is signed in.
+        guard session.loginMember(member.id, token: token) else {
+            failure = L("signin.notkept")
+            return
+        }
         var updated = session.deviceMembers.filter { $0.id != member.id }
         updated.append(member)
         session.updateDeviceMembers(updated)
@@ -371,7 +375,10 @@ struct AdminSheet: View {
                     let resp = try await CarnetAPI.login(username: username, password: password)
                     (id, token) = (resp.user_id, resp.token)
                 }
-                session.loginMember(id, token: token)
+                guard session.loginMember(id, token: token) else {
+                    failure = L("signin.notkept")
+                    return
+                }
                 if let roster = try? await CarnetAPI.listMembers(token: token) {
                     session.updateDeviceMembers(roster)
                 }

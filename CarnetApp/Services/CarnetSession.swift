@@ -243,10 +243,23 @@ final class CarnetSession {
         }
     }
 
-    func loginMember(_ id: String, token: String) {
+    /// Keep a session just opened and make its member the active one. False
+    /// when the Keychain refused the token: nobody is signed in — a session
+    /// this device cannot keep is closed on the server at once, not left
+    /// open there with nobody holding it — and the caller says so.
+    func loginMember(_ id: String, token: String) -> Bool {
+        guard storeToken(token, for: id) else {
+            // Not through `SessionClosures.close`: its list lives in the same
+            // Keychain, which is the one refusing.
+            if let url = serverURL {
+                let lost = SessionClosures.Pending(server: url, token: token, since: Date())
+                Task { _ = await SessionClosures.post(lost) }
+            }
+            return false
+        }
         sessionEnded = false
-        storeToken(token, for: id)
         activeMemberId = id
+        return true
     }
 
     /// Switch to a member who already has a cached token. Returns false if none.
@@ -303,11 +316,11 @@ final class CarnetSession {
         return TokenVault.get(Self.tokenKey(household.id, member))
     }
 
-    private func storeToken(_ token: String, for id: String) {
-        guard let k = tokenKey(id) else { return }
-        TokenVault.set(token, k)
+    private func storeToken(_ token: String, for id: String) -> Bool {
+        guard let k = tokenKey(id), TokenVault.set(token, k) else { return false }
         syncMirror()
         publishShared()
+        return true
     }
 
     private func removeToken(for id: String) {
