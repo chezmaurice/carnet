@@ -233,8 +233,11 @@ html.material .fold { border: 1px solid var(--outline); background: transparent;
 
 .fold-body { padding: 0 10px 12px; display: flex; flex-direction: column; gap: 10px; }
 .note-wrap { position: relative; }
-.note { height: 76px; resize: none; padding-right: 50px; line-height: 1.4; }
-html.sheet .note { height: 96px; font-size: 16px; }
+/* display: block — an inline textarea leaves the line's descender under it,
+   so the wrap was a few pixels taller than the field and the microphone,
+   placed from the wrap's bottom, sat against the field's edge. */
+.note { display: block; height: 76px; resize: none; padding-right: 50px; line-height: 1.4; }
+html.sheet .note { height: 96px; font-size: 16px; padding-right: 62px; }
 
 .mic {
   position: absolute;
@@ -254,7 +257,7 @@ html.sheet .note { height: 96px; font-size: 16px; }
 .mic.on { background: var(--bad); color: #fff; box-shadow: 0 0 0 5px color-mix(in srgb, var(--bad) 20%, transparent); }
 .mic.on .mic-idle { display: none; }
 .mic.on .mic-stop { display: block; }
-html.sheet .mic { width: 44px; height: 44px; border-radius: 22px; }
+html.sheet .mic { width: 44px; height: 44px; border-radius: 22px; right: 8px; bottom: 8px; }
 
 .chip {
   height: 30px;
